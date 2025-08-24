@@ -1,0 +1,28 @@
+quarkus:
+  native:
+    resources:
+      includes: youtube_videos.csv
+  hibernate-orm:
+    schema-management:
+      strategy: drop-and-create
+  datasource:
+    db-kind: h2
+    username: sa
+    password:
+    jdbc:
+      url: jdbc:h2:mem:videos;DB_CLOSE_DELAY=-1
+  http:
+    port: 8080
+  rest-client:
+    youtube-api:
+      url: https://www.googleapis.com
+
+youtube:
+   api:
+     key: ${YOUTUBE_API_KEY}
+
+# Local Development Override
+"%dev":
+   youtube:
+     api:
+       key: ${YOUTUBE_API_KEY:LOCAL_FALLBACK_KEY}

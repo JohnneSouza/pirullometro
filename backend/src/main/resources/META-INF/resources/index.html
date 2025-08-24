@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pirullômetro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            color: #5d4037; /* A brown color, like a famous pirate's beard */
+            font-weight: 600;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1.1em;
+            color: #666;
+            line-height: 1.6;
+        }
+        .pirulla-average-container {
+            margin-top: 30px;
+            background-color: #f7f7f7;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px dashed #ddd;
+        }
+        .pirulla-average-label {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #555;
+        }
+        .pirulla-average-value {
+            font-size: 2.5em;
+            font-weight: 600;
+            color: #d32f2f; /* A reddish color, like the famous pirate's hat */
+            margin-top: 5px;
+        }
+        .pirulla-explanation {
+            font-style: italic;
+            font-size: 0.9em;
+            color: #999;
+            margin-top: 15px;
+        }
+        .input-group {
+            margin: 20px 0;
+        }
+        .input-group input {
+            width: 70%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1em;
+        }
+        .input-group button {
+            width: 25%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background-color: #5d4037;
+            color: #fff;
+            font-family: inherit;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .input-group button:hover {
+            background-color: #4a312a;
+        }
+        .result-container {
+            margin-top: 20px;
+            min-height: 60px; /* Ensures space even when empty */
+        }
+        .result-value {
+            font-size: 2em;
+            font-weight: 600;
+            color: #d32f2f;
+        }
+        .result-label {
+            font-size: 1em;
+            color: #666;
+            margin-top: -5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Pirullômetro</h1>
+    <p>Descubra a duração dos seus vídeos em Pirulla!</p>
+
+    <div class="input-group">
+        <input type="text" id="video-url-input" placeholder="Cole a URL do vídeo do YouTube aqui...">
+        <button onclick="calculatePirullaTime()">Calcular</button>
+    </div>
+
+    <div class="result-container">
+        <div id="video-pirulla-result" class="result-value"></div>
+        <div id="video-pirulla-label" class="result-label"></div>
+    </div>
+
+    <div class="pirulla-average-container">
+        <span class="pirulla-average-label">Duração média de um Pirulla:</span>
+        <div class="pirulla-average-value" id="pirulla-average">Carregando...</div>
+        <p class="pirulla-explanation">
+            O valor é calculado a partir da média de todos os vídeos postados em seu canal oficial no YouTube.
+            <a href="https://www.youtube.com/@Pirulla25" target="_blank" rel="noopener noreferrer">@Pirulla25</a>.
+        </p>
+    </div>
+</div>
+
+<script>
+    // Script for the average Pirulla duration
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('/v1/api/videos/pirulla')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const durationInMinutes = data.pirullaDuration;
+                const formattedDuration = `${durationInMinutes.toFixed(2)} minutos`;
+                document.getElementById('pirulla-average').textContent = formattedDuration;
+            })
+            .catch(error => {
+                console.error('There was a problem fetching the data:', error);
+                document.getElementById('pirulla-average').textContent = 'Erro ao carregar';
+            });
+    });
+
+    // Script to calculate Pirulla duration for a specific video
+    function calculatePirullaTime() {
+        const videoUrl = document.getElementById('video-url-input').value;
+        const resultValueDiv = document.getElementById('video-pirulla-result');
+        const resultLabelDiv = document.getElementById('video-pirulla-label');
+
+        resultValueDiv.textContent = 'Calculando...';
+        resultLabelDiv.textContent = '';
+
+        if (!videoUrl) {
+            resultValueDiv.textContent = 'Por favor, insira uma URL.';
+            return;
+        }
+
+        fetch('/v1/api/videos/length', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ videoUrl: videoUrl }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    // If the response is not ok, read the error message from the response body
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.message || 'Erro ao calcular a duração do vídeo.');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.pirullaDuration !== undefined) {
+                    const pirullas = data.pirullaDuration.toFixed(2);
+                    resultValueDiv.textContent = pirullas;
+                    resultLabelDiv.textContent = `Pirullas`;
+                } else {
+                    resultValueDiv.textContent = 'Erro de dados.';
+                }
+            })
+            .catch(error => {
+                console.error('Erro na requisição:', error);
+                resultValueDiv.textContent = 'Erro ao calcular.';
+                resultLabelDiv.textContent = error.message;
+            });
+    }
+</script>
+</body>
+</html>
