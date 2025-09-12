@@ -16,10 +16,19 @@ quarkus:
   rest-client:
     youtube-api:
       url: https://www.googleapis.com
+    github-api:
+      url: https://api.github.com
 
 youtube:
    api:
      key: ${YOUTUBE_API_KEY}
+
+github:
+  api:
+    key: ${GITHUB_API_KEY}
+    username: ${GITHUB_USERNAME}
+    repository: ${GITHUB_REPOSITORY}
+    path: ${GITHUB_PATH}
 
 # Local Development Override
 "%dev":
@@ -35,3 +44,9 @@ youtube:
   youtube:
     api:
       key: ${YOUTUBE_API_KEY:LOCAL_FALLBACK_KEY}
+  github:
+    api:
+      key: ${GITHUB_API_KEY:LOCAL_FALLBACK_KEY}
+      username: ${GITHUB_USERNAME:LOCAL_FALLBACK_USERNAME}
+      repository: ${GITHUB_REPOSITORY:pirullometro}
+      path: ${GITHUB_PATH:backend/src/main/resources/youtube_videos.csv}

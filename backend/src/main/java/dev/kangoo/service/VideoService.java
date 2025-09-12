@@ -5,6 +5,8 @@ import dev.kangoo.domain.responses.ChannelLengthInformation;
 import dev.kangoo.domain.responses.RandomVideoResponse;
 import dev.kangoo.domain.responses.VideoLengthResponse;
 
+import java.util.Map;
+
 public interface VideoService {
 
     ChannelLengthInformation getChannelLengthInformation();
@@ -13,4 +15,5 @@ public interface VideoService {
 
     VideoLengthResponse getConvertedVideoLength(VideoConversionRequest request);
 
+    Map<String, Object> getPirulla();
 }

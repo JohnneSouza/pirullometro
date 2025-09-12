@@ -1,17 +1,18 @@
 package dev.kangoo.repository;
 
-import dev.kangoo.configuration.YouTubeRestClient;
+import dev.kangoo.rest.YouTubeRestClient;
 import dev.kangoo.configuration.YoutubeApiConfig;
 import dev.kangoo.domain.entity.VideoEntity;
-import dev.kangoo.domain.requests.VideoConversionRequest;
 import dev.kangoo.domain.responses.ChannelLengthInformation;
 import dev.kangoo.domain.responses.RandomVideoResponse;
 import dev.kangoo.domain.responses.VideoLengthResponse;
 import dev.kangoo.domain.responses.youtube.YoutubeVideoResponse;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
+import java.util.List;
 import java.util.Random;
 
 @ApplicationScoped
@@ -21,11 +22,17 @@ public class VideoRepository implements PanacheRepository<VideoEntity> {
     private final YoutubeApiConfig youtubeApiConfig;
 
     private static final String RETRIEVE_PARTS = "contentDetails,snippet";
+
+    // TODO: Fix the url to be compatible with other formats.
     private static final String YOUTUBE_WATCH_URL = "https://www.youtube.com/watch?v=";
 
     public VideoRepository(@RestClient YouTubeRestClient youTubeRestClient, YoutubeApiConfig youtubeApiConfig) {
         this.youTubeRestClient = youTubeRestClient;
         this.youtubeApiConfig = youtubeApiConfig;
+    }
+
+    public List<VideoEntity> getAllVideos() {
+        return this.findAll().stream().toList();
     }
 
     public void addVideo(VideoEntity video) {

@@ -28,7 +28,7 @@ public class VideoAnalyticsController {
     @GET
     @Path("/pirulla")
     public Map<String, Object> getPirulla(){
-        return Map.of("pirullaDuration", 42.5);
+        return this.videoService.getPirulla();
     }
 
     @GET

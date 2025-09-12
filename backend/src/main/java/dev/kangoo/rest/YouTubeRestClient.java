@@ -1,4 +1,4 @@
-package dev.kangoo.configuration;
+package dev.kangoo.rest;
 
 import dev.kangoo.domain.responses.youtube.YoutubeVideoResponse;
 import jakarta.ws.rs.GET;
