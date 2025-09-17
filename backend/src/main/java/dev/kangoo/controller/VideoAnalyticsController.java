@@ -1,7 +1,6 @@
 package dev.kangoo.controller;
 
 import dev.kangoo.domain.requests.VideoConversionRequest;
-import dev.kangoo.domain.responses.ChannelLengthInformation;
 import dev.kangoo.domain.responses.RandomVideoResponse;
 import dev.kangoo.domain.responses.VideoLengthResponse;
 import dev.kangoo.service.VideoService;
@@ -29,12 +28,6 @@ public class VideoAnalyticsController {
     @Path("/pirulla")
     public Map<String, Object> getPirulla(){
         return this.videoService.getPirulla();
-    }
-
-    @GET
-    @Path("/average")
-    public ChannelLengthInformation getAverage() {
-        return this.videoService.getChannelLengthInformation();
     }
 
     @GET

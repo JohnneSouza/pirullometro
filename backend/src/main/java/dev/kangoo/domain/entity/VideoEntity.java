@@ -18,11 +18,14 @@ public class VideoEntity extends PanacheEntity {
     @Column(nullable = false)
     private String publishedAt;
 
-    @Column(name = "thumbnail_url_high")
+    @Column(name = "thumbnails_high")
     private String thumbnailUrlHigh;
 
     @Column(nullable = false)
     private String duration;
+
+    @Column
+    private String tags;
 
     public String getVideoId() {
         return this.videoId;
@@ -62,5 +65,13 @@ public class VideoEntity extends PanacheEntity {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 }

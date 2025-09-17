@@ -1,7 +1,7 @@
 quarkus:
   native:
     resources:
-      includes: youtube_videos.csv
+      includes: import.sql
   hibernate-orm:
     schema-management:
       strategy: drop-and-create
