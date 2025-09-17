@@ -22,6 +22,7 @@ quarkus:
 youtube:
    api:
      key: ${YOUTUBE_API_KEY}
+     channel: ${YOUTUBE_CHANNEL}
 
 github:
   api:
@@ -44,6 +45,7 @@ github:
   youtube:
     api:
       key: ${YOUTUBE_API_KEY:LOCAL_FALLBACK_KEY}
+      channel: ${YOUTUBE_CHANNEL:LOCAL_FALLBACK_CHANNEL}
   github:
     api:
       key: ${GITHUB_API_KEY:LOCAL_FALLBACK_KEY}

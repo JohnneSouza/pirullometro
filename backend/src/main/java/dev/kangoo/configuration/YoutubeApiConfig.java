@@ -1,15 +1,10 @@
 package dev.kangoo.configuration;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import io.smallrye.config.ConfigMapping;
 
-@ApplicationScoped
-public class YoutubeApiConfig {
+@ConfigMapping(prefix = "youtube.api")
+public interface YoutubeApiConfig {
 
-    @ConfigProperty(name = "youtube.api.key")
-    String apiKey;
+    String channel();
 
-    public String getApiKey() {
-        return apiKey;
-    }
 }
