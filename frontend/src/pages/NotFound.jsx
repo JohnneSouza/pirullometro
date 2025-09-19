@@ -1,4 +1,4 @@
-import { StarBackground } from "@/components/StarBackground";
+import { Background } from "@/components/Background";
 import { useNavigate } from "react-router-dom";
 import { ThemeToggle } from "../components/ThemeToggle";
 
@@ -6,8 +6,8 @@ export const NotFound = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden flex items-center justify-center">
-      <StarBackground />
+  <div className="min-h-screen text-foreground overflow-x-hidden flex items-center justify-center">
+  <Background />
       <ThemeToggle />
 
       <div className="container max-w-4xl mx-auto text-center z-10 flex flex-col items-center justify-center min-h-screen">

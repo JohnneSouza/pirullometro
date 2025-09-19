@@ -1,54 +1,20 @@
-quarkus:
-  native:
-    resources:
-      includes: import.sql
-  hibernate-orm:
-    schema-management:
-      strategy: drop-and-create
+spring:
   datasource:
-    db-kind: h2
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
     username: sa
     password:
-    jdbc:
-      url: jdbc:h2:mem:videos;DB_CLOSE_DELAY=-1
-  http:
-    port: 8080
-  rest-client:
-    youtube-api:
-      url: https://www.googleapis.com
-    github-api:
-      url: https://api.github.com
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    open-in-view: false
 
 youtube:
-   api:
-     key: ${YOUTUBE_API_KEY}
-     channel: ${YOUTUBE_CHANNEL}
-
-github:
   api:
-    key: ${GITHUB_API_KEY}
-    username: ${GITHUB_USERNAME}
-    repository: ${GITHUB_REPOSITORY}
-    path: ${GITHUB_PATH}
-
-# Local Development Override
-"%dev":
-  quarkus:
-    http:
-      cors:
-        enabled: true
-        origins: "*"
-        methods: "GET,POST,PUT,DELETE,OPTIONS"
-        headers: "*"
-        exposed-headers: "*"
-        access-control-allow-credentials: true
-  youtube:
-    api:
-      key: ${YOUTUBE_API_KEY:LOCAL_FALLBACK_KEY}
-      channel: ${YOUTUBE_CHANNEL:LOCAL_FALLBACK_CHANNEL}
-  github:
-    api:
-      key: ${GITHUB_API_KEY:LOCAL_FALLBACK_KEY}
-      username: ${GITHUB_USERNAME:LOCAL_FALLBACK_USERNAME}
-      repository: ${GITHUB_REPOSITORY:pirullometro}
-      path: ${GITHUB_PATH:backend/src/main/resources/youtube_videos.csv}
+    base-url: https://www.googleapis.com
+    key: ${YOUTUBE_API_KEY}

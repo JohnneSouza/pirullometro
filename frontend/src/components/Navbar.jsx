@@ -3,7 +3,7 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const navItems = [
-  { name: "Home", href: "#hero" },
+  // { name: "Home", href: "#hero" },
   // { name: "About", href: "#about" },
   // { name: "Skills", href: "#skills" },
   // { name: "Projects", href: "#projects" },
@@ -35,7 +35,8 @@ export const Navbar = () => {
           href="#hero"
         >
           <span className="relative z-10">
-            <span className="text-glow text-foreground"> Pirullômetro </span>{" "}
+            <span className="text-glow text-foreground"></span>{" "}
+            Pirullômetro
           </span>
         </a>
 
