@@ -6,38 +6,36 @@ import dev.kangoo.pirullometro.domain.response.VideoLengthResponse;
 import dev.kangoo.pirullometro.domain.response.youtube.YoutubeVideoResponse;
 import dev.kangoo.pirullometro.entity.VideoEntity;
 import dev.kangoo.pirullometro.mappers.VideoMapper;
-import dev.kangoo.pirullometro.repository.VideoMetadataRepository;
-import dev.kangoo.pirullometro.rest.YouTubeRestClient;
+import dev.kangoo.pirullometro.repository.VideoDataRepository;
+import dev.kangoo.pirullometro.rest.YouTubeWebClient;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.StreamSupport;
 
 
 @Component
 public class VideoDataService {
 
-    private static final String RETRIEVE_PARTS = "contentDetails,snippet";
+    private static final String PARTS_TO_RETRIEVE = "contentDetails,snippet";
     private static final String YOUTUBE_WATCH_URL = "https://www.youtube.com/watch?v=";
 
-    private final YouTubeRestClient youTubeRestClient;
-    private final VideoMetadataRepository repository;
+    private final YouTubeWebClient youTubeWebClient;
+    private final VideoDataRepository repository;
     private final VideoMapper videoMapper;
 
-    public VideoDataService(YouTubeRestClient youTubeRestClient, VideoMetadataRepository repository, VideoMapper videoMapper) {
-        this.youTubeRestClient = youTubeRestClient;
+    public VideoDataService(YouTubeWebClient youTubeWebClient, VideoDataRepository repository, VideoMapper videoMapper) {
+        this.youTubeWebClient = youTubeWebClient;
         this.repository = repository;
         this.videoMapper = videoMapper;
     }
 
     public ChannelAnalyticsResponse getChannelAnalytics(){
-        List<VideoEntity> allVideos = StreamSupport
-                .stream(this.repository.findAll().spliterator(), false).toList();
+        List<VideoEntity> allVideos = this.repository.findAll().stream().toList();
 
         long videosLengthSumInSeconds = allVideos.stream()
-                .mapToLong(videoEntity -> Duration.parse(videoEntity.getDuration()).getSeconds())
+                .mapToLong(videoEntity -> Duration.parse(videoEntity.getLength()).getSeconds())
                 .sum();
 
         long totalHours = videosLengthSumInSeconds / 3600;
@@ -51,8 +49,21 @@ public class VideoDataService {
     }
 
     public VideoEntity getVideoInformation(String videoId) {
-        YoutubeVideoResponse videoDetails = this.youTubeRestClient.getVideoDetails(RETRIEVE_PARTS, videoId);
+        YoutubeVideoResponse videoDetails = this.youTubeWebClient.getVideoDetails(PARTS_TO_RETRIEVE, videoId);
         return this.videoMapper.toEntity(videoDetails);
+    }
+
+    /**
+     * Returns a list of video IDs that are not present in the database.
+     *
+     * @param videoIds the list of video IDs to check for existence in the database
+     * @return a list of video IDs that are missing from the database
+     */
+    public List<String> getMissingVideos(List<String> videoIds) {
+        List<String> existing = this.repository.findExistingVideoIds(videoIds);
+        return videoIds.stream()
+                .filter(id -> !existing.contains(id))
+                .toList();
     }
 
 
@@ -66,7 +77,7 @@ public class VideoDataService {
         long count = this.repository.count();
         int randomIndex = new Random().nextInt((int) count);
 
-        String videoId = this.repository.findFirstById((count - randomIndex - 1)).getVideoId();
+        String videoId = this.repository.findAll().get(randomIndex).getVideoId();
         String videoUrl = YOUTUBE_WATCH_URL + videoId;
 
         return new RandomVideoResponse(videoUrl);
@@ -75,7 +86,7 @@ public class VideoDataService {
     public VideoLengthResponse convertVideoLength(String url) {
         String videoId = url.substring(32);
 
-        YoutubeVideoResponse videoDetails = this.youTubeRestClient.getVideoDetails(RETRIEVE_PARTS, videoId);
+        YoutubeVideoResponse videoDetails = this.youTubeWebClient.getVideoDetails(PARTS_TO_RETRIEVE, videoId);
         String duration = videoDetails.getItems().getFirst().getContentDetails().getDuration();
 
         float averageMinutes = this.getChannelAnalytics().getAverageMinutes();
@@ -84,5 +95,9 @@ public class VideoDataService {
         float convertedDuration = (float) durationInSeconds / 60 / averageMinutes;
 
         return new VideoLengthResponse((short) convertedDuration);
+    }
+
+    public void saveAll(List<VideoEntity> videoDetailsList) {
+        this.repository.saveAll(videoDetailsList);
     }
 }

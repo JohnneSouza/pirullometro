@@ -1,43 +1,35 @@
 package dev.kangoo.pirullometro.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.bson.types.ObjectId;
 
-@Entity(name = "Video")
-@Table(name = "videos")
+@Document(collection = "videos")
 public class VideoEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private ObjectId id;
 
-    @Column(nullable = false, unique = true)
+    @Field(name = "id")
     private String videoId;
 
-    @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
     private String publishedAt;
 
-    @Column(name = "thumbnails_high")
+    @Field(name = "thumbnails_high")
     private String thumbnailUrlHigh;
 
-    @Column(nullable = false)
-    private String duration;
+    private String length;
 
-    @Column(length = 1024)
     private String tags;
 
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
@@ -73,12 +65,12 @@ public class VideoEntity {
         this.thumbnailUrlHigh = thumbnailUrlHigh;
     }
 
-    public String getDuration() {
-        return this.duration;
+    public String getLength() {
+        return this.length;
     }
 
-    public void setDuration(String duration) {
-        this.duration = duration;
+    public void setLength(String length) {
+        this.length = length;
     }
 
     public String getTags() {

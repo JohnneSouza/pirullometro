@@ -2,19 +2,20 @@ package dev.kangoo.pirullometro.rest;
 
 
 import dev.kangoo.pirullometro.domain.response.youtube.YoutubeVideoResponse;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
-public class YouTubeRestClient {
+public class YouTubeWebClient {
 
     private final String youtubeApiKey;
     private final WebClient youTubeWebClient;
 
-    public YouTubeRestClient(@Value("${youtube.api.key}") String apiKey,
-                             WebClient youTubeWebClient) {
+    public YouTubeWebClient(@Value("${youtube.api.key}") String apiKey,
+                            @Qualifier("youTubeWebClientProvider") WebClient youTubeWebClient) {
         this.youTubeWebClient = youTubeWebClient;
         this.youtubeApiKey = apiKey;
     }

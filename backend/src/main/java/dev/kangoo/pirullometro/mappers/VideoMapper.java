@@ -14,7 +14,7 @@ public interface VideoMapper {
     @Mapping(source = "items.first.snippet.publishedAt", target = "publishedAt")
     @Mapping(source = "items.first.snippet.title", target = "title")
     @Mapping(source = "items.first.snippet.thumbnails.high.url", target = "thumbnailUrlHigh")
-    @Mapping(source = "items.first.contentDetails.duration", target = "duration")
+    @Mapping(source = "items.first.contentDetails.duration", target = "length")
     @Mapping(source = "items.first.snippet.tags", target = "tags")
     VideoEntity toEntity(YoutubeVideoResponse response);
 

@@ -1,0 +1,12 @@
+services:
+  pirullometro-db:
+    image: mongo:8.0
+    container_name: pirullometro-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/db:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: pirullometro
+      MONGO_INITDB_ROOT_USERNAME: db_username
+      MONGO_INITDB_ROOT_PASSWORD: db_password
