@@ -5,6 +5,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.bson.types.ObjectId;
 
+import java.util.Date;
+
 @Document(collection = "videos")
 public class VideoEntity {
 
@@ -16,7 +18,7 @@ public class VideoEntity {
 
     private String title;
 
-    private String publishedAt;
+    private Date publishedAt;
 
     @Field(name = "thumbnails_high")
     private String thumbnailUrlHigh;
@@ -49,11 +51,11 @@ public class VideoEntity {
         this.title = title;
     }
 
-    public String getPublishedAt() {
+    public Date getPublishedAt() {
         return this.publishedAt;
     }
 
-    public void setPublishedAt(String publishedAt) {
+    public void setPublishedAt(Date publishedAt) {
         this.publishedAt = publishedAt;
     }
 

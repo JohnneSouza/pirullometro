@@ -1,6 +1,6 @@
 package dev.kangoo.pirullometro.domain.response.youtube;
 
-public class YouTubeVideoItem {
+public class YouTubeVideoListItem {
 
     private String id;
     private YouTubeSnippet snippet;

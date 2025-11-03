@@ -1,6 +1,6 @@
 package dev.kangoo.pirullometro.controller;
 
-import dev.kangoo.pirullometro.service.YouTubeWebHookService;
+import dev.kangoo.pirullometro.service.WebHookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -13,14 +13,14 @@ import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("/v1/api/webhook")
-public class YouTubeWebHookController {
+public class WebHookController {
 
-    private final YouTubeWebHookService youTubeWebHookService;
+    private final WebHookService webHookService;
 
-    private static final Logger log = LoggerFactory.getLogger(YouTubeWebHookController.class);
+    private static final Logger log = LoggerFactory.getLogger(WebHookController.class);
 
-    public YouTubeWebHookController(YouTubeWebHookService youTubeWebHookService) {
-        this.youTubeWebHookService = youTubeWebHookService;
+    public WebHookController(WebHookService webHookService) {
+        this.webHookService = webHookService;
     }
 
     @GetMapping(produces = MediaType.TEXT_PLAIN_VALUE)
@@ -39,7 +39,7 @@ public class YouTubeWebHookController {
         log.info("Received notification");
         try (bodyStream) {
             String requestBody = new String(bodyStream.readAllBytes(), StandardCharsets.UTF_8);
-            this.youTubeWebHookService.processNotification(requestBody);
+            this.webHookService.processNotification(requestBody);
         } catch (IOException e) {
             return ResponseEntity.internalServerError().body("Error reading notification");
         }

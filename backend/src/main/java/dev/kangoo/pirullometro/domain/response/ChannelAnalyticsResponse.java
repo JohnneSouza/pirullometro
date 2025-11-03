@@ -4,8 +4,7 @@ public class ChannelAnalyticsResponse {
 
     private int totalHours;
     private int totalVideos;
-    private float averageHours;
-    private float averageMinutes;
+    private float averageTimeInMinutes;
 
     private ChannelAnalyticsResponse() {
     }
@@ -18,12 +17,8 @@ public class ChannelAnalyticsResponse {
         return this.totalVideos;
     }
 
-    public float getAverageHours() {
-        return this.averageHours;
-    }
-
-    public float getAverageMinutes() {
-        return this.averageMinutes;
+    public float getAverageTimeInMinutes() {
+        return this.averageTimeInMinutes;
     }
 
     public static Builder builder() {
@@ -48,13 +43,8 @@ public class ChannelAnalyticsResponse {
             return this;
         }
 
-        public Builder averageHours(float averageHours) {
-            this.response.averageHours = averageHours;
-            return this;
-        }
-
-        public Builder averageMinutes(float averageMinutes) {
-            this.response.averageMinutes = averageMinutes;
+        public Builder averageTimeInMin(float averageTimeInMinutes) {
+            this.response.averageTimeInMinutes = averageTimeInMinutes;
             return this;
         }
 
